@@ -1,61 +1,60 @@
 package hashset
 
-type HashSet[T comparable] struct {
-	hashMap map[T]struct{}
+type HashSet[T comparable] map[T]struct{}
+
+func New[T comparable]() HashSet[T] {
+	return make(map[T]struct{})
 }
 
-func New[T comparable](size ...int) *HashSet[T] {
-	if len(size) == 1 {
-		return &HashSet[T]{ hashMap: make(map[T]struct{}, size[0]) }
-	}
-	return &HashSet[T]{ hashMap: make(map[T]struct{}) }
+func WithCapacity[T comparable](initialCapacity int) HashSet[T] {
+	return make(map[T]struct{}, initialCapacity)
 }
 
-func From[T comparable](items ...T) *HashSet[T] {
-	set := New[T](len(items))
+func From[T comparable](items ...T) HashSet[T] {
+	set := WithCapacity[T](len(items))
 	set.AddAll(items...)
 	return set
 }
 
 func (set HashSet[T]) Add(item T) bool {
-	beforeLen := len(set.hashMap)
-	set.hashMap[item] = struct{}{}
-	return beforeLen < len(set.hashMap)
+	beforeLen := len(set)
+	set[item] = struct{}{}
+	return beforeLen < len(set)
 }
 
 func (set HashSet[T]) Len() int {
-	return len(set.hashMap)
+	return len(set)
 }
 
 func (set HashSet[T]) AddAll(items ...T) bool {
-	beforeLen := len(set.hashMap)
+	beforeLen := len(set)
 	for _, el := range items {
-		set.hashMap[el] = struct{}{}
+		set[el] = struct{}{}
 	}
-	return beforeLen < len(set.hashMap)
+	return beforeLen < len(set)
 }
 
 func (set HashSet[T]) Remove(item T) bool {
-	if _, exists := set.hashMap[item]; exists {
-		delete(set.hashMap, item)
+	if _, exists := set[item]; exists {
+		delete(set, item)
 		return true
 	}
 	return false
 }
 
 func (set HashSet[T]) RemoveAll(items ...T) bool {
-	beforeLen := len(set.hashMap)
+	beforeLen := len(set)
 	for _, el := range items {
-		delete(set.hashMap, el)
+		delete(set, el)
 	}
-	return beforeLen > len(set.hashMap)
+	return beforeLen > len(set)
 }
 
 // type BreakFunc func()
 type Consumer[T any] func(item T) 
 
 func (set HashSet[T]) ForEach(consumer Consumer[T]) {
-	for item := range set.hashMap {
+	for item := range set {
 		consumer(item)
 	}
 }

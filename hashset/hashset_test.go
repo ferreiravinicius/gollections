@@ -21,25 +21,18 @@ func contains[T comparable](slice []T, item T) bool {
 }
 
 func TestHashSetNew(t *testing.T) {
-	s := New[int]()
-	if s == nil {
-		t.Errorf("expected set not to be nil")
-	}
-	if s.hashMap == nil {
-		t.Errorf("expected map inside of set not to be nil")
-	}
-	havingSize := New[int]()
-	if havingSize.hashMap == nil {
-		t.Errorf("expected map inside of set not to be nil")
-	}
+	n := New[int]()
+	eq(t, n.Len(), 0)
+	withCap := WithCapacity[int](5)
+	eq(t, withCap.Len(), 0)
 }
 
 func TestHashSetAdd(t *testing.T) {
 	s := New[int]()
 	eq(t, s.Add(1), true)
-	eq(t, len(s.hashMap), 1)
+	eq(t, s.Len(), 1)
 	eq(t, s.Add(1), false)
-	eq(t, len(s.hashMap), 1)
+	eq(t, s.Len(), 1)
 }
 
 func TestHashSetLen(t *testing.T) {
@@ -55,16 +48,16 @@ func TestHashSetAddAll(t *testing.T) {
 	s := New[int]()
 
 	eq(t, s.AddAll(), false)
-	eq(t, len(s.hashMap), 0)
+	eq(t, s.Len(), 0)
 
 	eq(t, s.AddAll(1, 2, 3), true)
-	eq(t, len(s.hashMap), 3)
+	eq(t, s.Len(), 3)
 
 	eq(t, s.AddAll(1, 2, 3, 4), true)
-	eq(t, len(s.hashMap), 4)
+	eq(t, s.Len(), 4)
 
 	eq(t, s.AddAll(1, 2), false)
-	eq(t, len(s.hashMap), 4)
+	eq(t, s.Len(), 4)
 }
 
 func TestHashSetRemove(t *testing.T) {
@@ -101,7 +94,7 @@ func TestHashSetRemoveAll(t *testing.T) {
 
 func (set HashSet[T]) IterItems() (chan T, func()) {
 
-	results := make(chan T, len(set.hashMap))
+	results := make(chan T, len(set))
 	cancel := make(chan bool, 1)
 	exit := func() {
 		cancel <- true
@@ -110,7 +103,7 @@ func (set HashSet[T]) IterItems() (chan T, func()) {
 	go func(results chan T, cancel chan bool) {
 		defer close(results)
 		defer close(cancel)
-		for item := range set.hashMap {
+		for item := range set {
 			curr := item
 			select {
 			case results <- curr:
