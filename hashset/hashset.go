@@ -50,3 +50,12 @@ func (set HashSet[T]) RemoveAll(items ...T) bool {
 	}
 	return beforeLen > len(set.hashMap)
 }
+
+// type BreakFunc func()
+type Consumer[T any] func(item T) 
+
+func (set HashSet[T]) ForEach(consumer Consumer[T]) {
+	for item := range set.hashMap {
+		consumer(item)
+	}
+}

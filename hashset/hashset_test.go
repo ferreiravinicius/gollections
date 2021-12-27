@@ -11,6 +11,15 @@ func eq[T comparable](t *testing.T, received T, expected T) {
 	}
 }
 
+func contains[T comparable](slice []T, item T) bool {
+	for _, each := range slice {
+		if each == item {
+			return true
+		}	
+	}
+	return false
+}
+
 func TestHashSetNew(t *testing.T) {
 	s := New[int]()
 	if s == nil {
@@ -88,6 +97,8 @@ func TestHashSetRemoveAll(t *testing.T) {
 	eq(t, s.Len(), 1)
 }
 
+
+
 func (set HashSet[T]) IterItems() (chan T, func()) {
 
 	results := make(chan T, len(set.hashMap))
@@ -112,4 +123,16 @@ func (set HashSet[T]) IterItems() (chan T, func()) {
 	return results, exit
 }
 
+
+
+func TestHashSetForEach(t *testing.T) {
+	set := From[int](1, 2, 3)
+	r := make([]int, 0, 3)
+	set.ForEach(func(item int) {
+		r = append(r, item)
+	})
+	eq(t, contains(r, 1), true)
+	eq(t, contains(r, 2), true)
+	eq(t, contains(r, 3), true)
+}
 
