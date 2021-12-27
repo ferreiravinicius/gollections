@@ -2,6 +2,8 @@ package hashset
 
 import (
 	"testing"
+
+	"github.com/ferreiravinicius/gollections/set"
 )
 
 func eq[T comparable](t *testing.T, received T, expected T) {
@@ -15,7 +17,7 @@ func contains[T comparable](slice []T, item T) bool {
 	for _, each := range slice {
 		if each == item {
 			return true
-		}	
+		}
 	}
 	return false
 }
@@ -69,16 +71,16 @@ func TestHashSetRemove(t *testing.T) {
 }
 
 func TestFrom(t *testing.T) {
-	s1 := From[int](1, 2, 3, 4, 5)
+	s1 := From(1, 2, 3, 4, 5)
 	eq(t, s1.Len(), 5)
 
 	slice := []int{1, 2, 3}
-	s2 := From[int](slice...)
+	s2 := From(slice...)
 	eq(t, s2.Len(), 3)
 }
 
 func TestHashSetRemoveAll(t *testing.T) {
-	s := From[int](1, 2, 3, 4, 5)
+	s := From(1, 2, 3, 4, 5)
 
 	eq(t, s.RemoveAll(), false)
 	eq(t, s.Len(), 5)
@@ -90,8 +92,6 @@ func TestHashSetRemoveAll(t *testing.T) {
 	eq(t, s.Len(), 1)
 }
 
-
-
 func (set HashSet[T]) IterItems() (chan T, func()) {
 
 	results := make(chan T, len(set))
@@ -99,7 +99,7 @@ func (set HashSet[T]) IterItems() (chan T, func()) {
 	exit := func() {
 		cancel <- true
 	}
-	
+
 	go func(results chan T, cancel chan bool) {
 		defer close(results)
 		defer close(cancel)
@@ -107,9 +107,9 @@ func (set HashSet[T]) IterItems() (chan T, func()) {
 			curr := item
 			select {
 			case results <- curr:
-			case <- cancel:
+			case <-cancel:
 				break
-			}	
+			}
 		}
 	}(results, cancel)
 
@@ -117,9 +117,9 @@ func (set HashSet[T]) IterItems() (chan T, func()) {
 }
 
 func TestHashSetForEach(t *testing.T) {
-	set := From[int](1, 2, 3)
+	s := From(1, 2, 3)
 	r := make([]int, 0, 3)
-	set.ForEach(func(item int) {
+	s.ForEach(func(item int) {
 		r = append(r, item)
 	})
 	eq(t, contains(r, 1), true)
@@ -128,12 +128,17 @@ func TestHashSetForEach(t *testing.T) {
 }
 
 func TestHashSetCanLoopUsingFor(t *testing.T) {
-	set := From[int](1, 2, 3)
-	r := make([]int, 0, len(set))
-	for item := range set {
+	s := From(1, 2, 3)
+	r := make([]int, 0, len(s))
+	for item := range s {
 		r = append(r, item)
-	}	
+	}
 	eq(t, contains(r, 1), true)
 	eq(t, contains(r, 2), true)
 	eq(t, contains(r, 3), true)
+}
+
+func TestHashSetObeysSetContract(t *testing.T) {
+	var s set.Set[int] = From(1, 2, 3)
+	eq(t, s.Len(), 3)
 }

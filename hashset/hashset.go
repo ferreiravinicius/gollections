@@ -1,5 +1,7 @@
 package hashset
 
+import "github.com/ferreiravinicius/gollections/set"
+
 type HashSet[T comparable] map[T]struct{}
 
 func New[T comparable]() HashSet[T] {
@@ -16,44 +18,42 @@ func From[T comparable](items ...T) HashSet[T] {
 	return set
 }
 
-func (set HashSet[T]) Add(item T) bool {
-	beforeLen := len(set)
-	set[item] = struct{}{}
-	return beforeLen < len(set)
+func (s HashSet[T]) Add(item T) bool {
+	beforeLen := len(s)
+	s[item] = struct{}{}
+	return beforeLen < len(s)
 }
 
-func (set HashSet[T]) Len() int {
-	return len(set)
+func (s HashSet[T]) Len() int {
+	return len(s)
 }
 
-func (set HashSet[T]) AddAll(items ...T) bool {
-	beforeLen := len(set)
+func (s HashSet[T]) AddAll(items ...T) bool {
+	beforeLen := len(s)
 	for _, el := range items {
-		set[el] = struct{}{}
+		s[el] = struct{}{}
 	}
-	return beforeLen < len(set)
+	return beforeLen < len(s)
 }
 
-func (set HashSet[T]) Remove(item T) bool {
-	if _, exists := set[item]; exists {
-		delete(set, item)
+func (s HashSet[T]) Remove(item T) bool {
+	if _, exists := s[item]; exists {
+		delete(s, item)
 		return true
 	}
 	return false
 }
 
-func (set HashSet[T]) RemoveAll(items ...T) bool {
-	beforeLen := len(set)
+func (s HashSet[T]) RemoveAll(items ...T) bool {
+	beforeLen := len(s)
 	for _, el := range items {
-		delete(set, el)
+		delete(s, el)
 	}
-	return beforeLen > len(set)
+	return beforeLen > len(s)
 }
 
-type Consumer[T any] func(item T) 
-
-func (set HashSet[T]) ForEach(consumer Consumer[T]) {
-	for item := range set {
+func (s HashSet[T]) ForEach(consumer set.Consumer[T]) {
+	for item := range s {
 		consumer(item)
 	}
 }
