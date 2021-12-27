@@ -52,8 +52,8 @@ func (s HashSet[T]) RemoveAll(items ...T) bool {
 	return beforeLen > len(s)
 }
 
-func (s HashSet[T]) ForEach(consumer set.Consumer[T]) {
+func (s HashSet[T]) ForEach(executeAction set.Action[T]) {
 	for item := range s {
-		consumer(item)
+		executeAction(item)
 	}
 }
