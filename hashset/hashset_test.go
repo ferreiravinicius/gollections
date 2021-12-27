@@ -116,8 +116,6 @@ func (set HashSet[T]) IterItems() (chan T, func()) {
 	return results, exit
 }
 
-
-
 func TestHashSetForEach(t *testing.T) {
 	set := From[int](1, 2, 3)
 	r := make([]int, 0, 3)
@@ -129,3 +127,13 @@ func TestHashSetForEach(t *testing.T) {
 	eq(t, contains(r, 3), true)
 }
 
+func TestHashSetCanLoopUsingFor(t *testing.T) {
+	set := From[int](1, 2, 3)
+	r := make([]int, 0, len(set))
+	for item := range set {
+		r = append(r, item)
+	}	
+	eq(t, contains(r, 1), true)
+	eq(t, contains(r, 2), true)
+	eq(t, contains(r, 3), true)
+}
