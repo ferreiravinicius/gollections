@@ -8,7 +8,7 @@ Go **1.18+**
 
 ## Install
 
-```bash
+```console
 $ go get -u github.com/ferreiravinicius/gollections
 ```
 
