@@ -1,6 +1,13 @@
-Implementation of missing colections for Golang using Generics.  
-Free of dependencies.  
-Curently in **early development** phase.
+![Gollections](gollections.png)  
+
+<center>
+Implementation of missing colections for Golang using Generics. <br> 
+Free of dependencies.  <br />
+Curently in <b>early development</b> phase.
+</center>
+
+<br />
+<br />
 
 ## Requirements
 
