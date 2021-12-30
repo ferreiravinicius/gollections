@@ -1,6 +1,6 @@
 package hashset
 
-import "github.com/ferreiravinicius/gollections/set"
+import "github.com/ferreiravinicius/gollections/collection"
 
 // HashSet is a collection that contains no duplicate elements.
 // Implemention of set backed by a Hash Table (Go builtin Map).
@@ -87,8 +87,27 @@ func (s HashSet[T]) RemoveAll(items ...T) bool {
 }
 
 // Performs an action for each item inside this set.
-func (s HashSet[T]) ForEach(action set.Action[T]) {
+func (s HashSet[T]) ForEach(action collection.Action[T]) {
 	for item := range s {
 		action(item)
 	}
+}
+
+func (s HashSet[T]) Contains(item T) bool {
+	_, exists := s[item]
+	return exists
+}
+
+func (s HashSet[T]) IsEmpty() bool {
+	return len(s) == 0
+}
+
+func (s HashSet[T]) ToSlice() []T {
+	result := make([]T, len(s))
+	n := 0
+	for item := range s {
+		result[n] = item
+		n++
+	}
+	return result
 }

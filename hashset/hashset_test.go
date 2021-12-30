@@ -142,3 +142,24 @@ func TestHashSetObeysSetContract(t *testing.T) {
 	var s collection.Set[int] = From(1, 2, 3)
 	eq(t, s.Len(), 3)
 }
+
+func TestHashSetContains(t *testing.T) {
+	s := New[int]()
+	eq(t, s.Contains(1), false)
+	s.Add(1)
+	eq(t, s.Contains(1), true)
+	s.Remove(1)
+	eq(t, s.Contains(1), false)
+}
+
+func TestHashSetIsEmpty(t *testing.T) {
+	eq(t, New[int]().IsEmpty(), true)
+	eq(t, From(1, 2, 3).IsEmpty(), false)
+}
+
+func TestHashSetToSlice(t *testing.T) {
+	empty := New[int]().ToSlice()
+	eq(t, len(empty), 0)
+	more := From(1, 2, 3).ToSlice()
+	eq(t, len(more), 3)
+}
