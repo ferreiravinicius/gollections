@@ -25,6 +25,9 @@ type Set[T any] interface {
 	// Performs an action for each item inside this set.
 	// A action is -> func(item T)
 	ForEach(action Action[T])
+
+	// Returns true if provided item exists in this set.
+	Contains(item T) bool
 }
 
 // Represents the signature for a action.

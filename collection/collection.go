@@ -9,7 +9,4 @@ type Collection[T any] interface {
 
 	// Creates a new slice containing all items from this collection.
 	ToSlice() []T
-
-	// Returns true if provided item exists in this set.
-	Contains(item T) bool
 }
