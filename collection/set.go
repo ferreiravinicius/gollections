@@ -1,9 +1,10 @@
-package set
+package collection
 
 // A collection that contains no duplicate elements.
 // This interface exists in case the user wants to
 // depends on a contract instead of the implementation.
-type Set[T comparable] interface {
+type Set[T any] interface {
+	Collection[T]
 
 	// Adds a new item to this set if it is not present.
 	// Returns true if the item is added.
@@ -12,9 +13,6 @@ type Set[T comparable] interface {
 	// Adds all items to this set if it is not present.
 	// Returns true if at least one item is added.
 	AddAll(items ...T) bool
-
-	// Returns the size of this set.
-	Len() int
 
 	// Removes from this set the specified item if it is present.
 	// Returns true if item is removed.

@@ -3,7 +3,7 @@ package hashset
 import (
 	"testing"
 
-	"github.com/ferreiravinicius/gollections/set"
+	"github.com/ferreiravinicius/gollections/collection"
 )
 
 func eq[T comparable](t *testing.T, received T, expected T) {
@@ -139,6 +139,6 @@ func TestHashSetCanLoopUsingFor(t *testing.T) {
 }
 
 func TestHashSetObeysSetContract(t *testing.T) {
-	var s set.Set[int] = From(1, 2, 3)
+	var s collection.Set[int] = From(1, 2, 3)
 	eq(t, s.Len(), 3)
 }
