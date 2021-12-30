@@ -117,13 +117,18 @@ func (s HashSet[T]) ToSlice() []T {
 	return result
 }
 
+const (
+	prefix   = "HashSet{"
+	suffix   = " }"
+	template = " %v"
+)
+
 func (s HashSet[T]) String() string {
 	var sb strings.Builder
-	sb.WriteString("Set{")
+	sb.WriteString(prefix)
 	for item := range s {
-		template := " %v"
 		fmt.Fprintf(&sb, template, item)
 	}
-	sb.WriteString(" }")
+	sb.WriteString(suffix)
 	return sb.String()
 }
