@@ -1,6 +1,11 @@
 package hashset
 
-import "github.com/ferreiravinicius/gollections/collection"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/ferreiravinicius/gollections/collection"
+)
 
 // HashSet is a collection that contains no duplicate elements.
 // Implemention of set backed by a Hash Table (Go builtin Map).
@@ -110,4 +115,15 @@ func (s HashSet[T]) ToSlice() []T {
 		n++
 	}
 	return result
+}
+
+func (s HashSet[T]) String() string {
+	var sb strings.Builder
+	sb.WriteString("Set{")
+	for item := range s {
+		template := " %v"
+		fmt.Fprintf(&sb, template, item)
+	}
+	sb.WriteString(" }")
+	return sb.String()
 }

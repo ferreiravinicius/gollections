@@ -1,6 +1,7 @@
 package hashset
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/ferreiravinicius/gollections/collection"
@@ -162,4 +163,20 @@ func TestHashSetToSlice(t *testing.T) {
 	eq(t, len(empty), 0)
 	more := From(1, 2, 3).ToSlice()
 	eq(t, len(more), 3)
+}
+
+func TestHashSetString(t *testing.T) {
+	set := New[int]()
+	eq(t, "Set{ }", set.String())
+	set.Add(1)
+	eq(t, "Set{ 1 }", set.String())
+	set.Add(2)
+
+	// builtin map doesn't guarantee order
+	// we can't predict the output with multiple items
+	r := set.String()
+	eq(t, strings.Contains(r, "Set{ "), true)
+	eq(t, strings.Contains(r, " }"), true)
+	eq(t, strings.Contains(r, "1"), true)
+	eq(t, strings.Contains(r, "2"), true)
 }

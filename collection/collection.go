@@ -1,6 +1,9 @@
 package collection
 
+import "fmt"
+
 type Collection[T any] interface {
+	fmt.Stringer
 	// Returns the lenght of this collection.
 	Len() int
 
